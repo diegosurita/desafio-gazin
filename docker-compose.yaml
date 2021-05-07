@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  app:
+    image: gazin-app
+    container_name: gazin-app
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+
+  database:
+    image: mariadb:10
+    container_name: gazin-db
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: 'gazin'
