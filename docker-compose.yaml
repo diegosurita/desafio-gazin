@@ -15,6 +15,7 @@ services:
   database:
     image: mariadb:10
     container_name: gazin-db
+    restart: always
     ports:
       - 3306:3306
     environment:
