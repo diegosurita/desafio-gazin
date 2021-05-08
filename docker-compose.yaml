@@ -16,6 +16,8 @@ services:
     image: mariadb:10
     container_name: gazin-db
     restart: always
+    volumes:
+      - ./etc:/gazin
     ports:
       - 3306:3306
     environment:
