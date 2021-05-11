@@ -9,3 +9,13 @@ CREATE TABLE IF NOT EXISTS developers (
     hobby VARCHAR(255),
     birthdate DATE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+
+INSERT INTO developers (
+    name, sex, age, hobby, birthdate
+) VALUES (
+    'Diego Surita',
+    'M',
+    29,
+    'Baterista',
+    '1991-06-20'
+);
