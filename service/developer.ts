@@ -1,11 +1,13 @@
-import developerRepository from './../repository/developer';
+import {DeveloperRepository} from '../repository/developer';
+
+const developerRepository: DeveloperRepository = new DeveloperRepository();
 
 export default {
-    fetchAll: async (page, limit) => {
+    fetchAll: async (page: number, limit: number, search: string = '') => {
         page = page || 1;
         limit = limit || 25;
 
-        const developers = await developerRepository.fetchAll(page, limit);
+        const developers = await developerRepository.fetchAll(page, limit, search);
 
         if ('error' in developers) {
             const {error} = developers;

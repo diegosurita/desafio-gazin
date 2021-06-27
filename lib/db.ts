@@ -1,6 +1,6 @@
 import mysql from 'serverless-mysql';
 
-const db = mysql({
+let cfg: any = {
     config: {
         host: process.env.MYSQL_HOST,
         port: process.env.MYSQL_PORT,
@@ -8,14 +8,16 @@ const db = mysql({
         user: process.env.MYSQL_USER,
         password: process.env.MYSQL_PASSWORD
     }
-});
+};
 
-let excuteQuery = async ({query, values}) => {
+const db = mysql(cfg);
+
+let excuteQuery = async (query: string, values: any[]) => {
     try {
-        const results = await db.query(query, values);
+        const results: [] = await db.query(query, values);
         await db.end();
         return results;
-    } catch (error) {
+    } catch (error: any) {
         return {error};
     }
 }
