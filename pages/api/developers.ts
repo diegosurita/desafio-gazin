@@ -1,5 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import developerService from './../../service/developer';
+import {DeveloperService} from '../../service/developer';
+
+const developerService: DeveloperService = new DeveloperService();
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const page: any = req.query.page,
@@ -17,5 +19,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(404).send('');
     }
 
-    return res.json(developers);
+    return res.json({
+        data: developers,
+        meta: {
+            page,
+            limit
+        }
+    });
 }

@@ -2,8 +2,9 @@ import {DeveloperRepository} from '../repository/developer';
 
 const developerRepository: DeveloperRepository = new DeveloperRepository();
 
-export default {
-    fetchAll: async (page: number, limit: number, search: string = '') => {
+export class DeveloperService {
+
+    async fetchAll(page: number, limit: number, search: string = '') {
         page = page || 1;
         limit = limit || 25;
 
@@ -14,12 +15,7 @@ export default {
             return {error};
         }
 
-        return {
-            data: developers,
-            meta: {
-                page,
-                limit
-            }
-        }
+        return developers;
     }
+
 }

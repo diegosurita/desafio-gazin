@@ -1,4 +1,4 @@
-import excuteQuery from './../lib/db';
+import executeQuery from './../lib/db';
 
 export class DeveloperRepository {
 
@@ -11,7 +11,7 @@ export class DeveloperRepository {
 
         const sql: string = 'SELECT * FROM developers ' + searchLike + ' LIMIT ' + (page - 1) + ',' + limit;
 
-        return await excuteQuery(sql, []);
+        return await executeQuery(sql, []);
     }
 
 }
