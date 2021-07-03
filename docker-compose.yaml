@@ -6,7 +6,7 @@ services:
     container_name: gazin-app
     build: .
     ports:
-      - 3000:3000
+      - 80:3000
     volumes:
       - .:/app
     depends_on:
@@ -17,7 +17,7 @@ services:
     container_name: gazin-db
     restart: always
     volumes:
-      - ./etc:/gazin
+      - ./etc/setup-db.sql:/docker-entrypoint-initdb.d/dump.sql
     ports:
       - 3306:3306
     environment:
