@@ -18,4 +18,18 @@ export class DeveloperService {
         return developers;
     }
 
+    async getCountDevelopers() {
+        const result: any = await developerRepository.getTotalDevelopers();
+
+        if ('error' in result) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Erro na tentativa de obter o total de desenvolvedores cadastrados',
+                ...result
+            };
+        }
+
+        return result[0].total;
+    }
+
 }

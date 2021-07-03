@@ -6,10 +6,18 @@ export class DeveloperRepository {
         let searchLike: string = '';
 
         if (search !== '') {
-            searchLike = " WHERE name LIKE '%" + search + "%'";
+            searchLike = ` WHERE name LIKE '%${search}%'`;
         }
 
-        const sql: string = 'SELECT * FROM developers ' + searchLike + ' LIMIT ' + (page - 1) + ',' + limit;
+        const sql: string = `
+            SELECT * FROM developers ${searchLike} LIMIT ${(page - 1)},${limit}
+        `;
+
+        return await executeQuery(sql, []);
+    }
+
+    async getTotalDevelopers() {
+        const sql: string = `SELECT COUNT(1) AS total FROM developers`;
 
         return await executeQuery(sql, []);
     }
