@@ -11,10 +11,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             developers: any = await developerService.fetchAll(page, limit, search),
             total: number = await developerService.getCountDevelopers();
 
-
         response.status(200);
 
-        if ('data' in developers && !developers.data.length) {
+        if (!developers.length) {
             return response.status(404).send('');
         }
 
