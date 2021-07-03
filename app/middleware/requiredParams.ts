@@ -1,7 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 
 export default async (request: NextApiRequest, response: NextApiResponse, params: Array<string>) => {
-    let missingParams: Array<string> = [];;
+    let missingParams: Array<string> = [];
 
     params.forEach(param => {
 
