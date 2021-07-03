@@ -9,6 +9,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         case 'GET':
             return DeveloperController.list(request, response);
         case 'POST':
+            requiredParams(request, response, ['name', 'sex', 'age', 'hobby', 'birthDate']);
             return DeveloperController.create(request, response);
         default:
             response.setHeader('Allow', ['GET', 'POST'])

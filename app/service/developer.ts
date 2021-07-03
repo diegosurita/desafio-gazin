@@ -44,4 +44,36 @@ export default class DeveloperService {
         return result;
     }
 
+    public static async storeDeveloper(data: any) {
+        const {
+            name,
+            sex,
+            age,
+            hobby,
+            birthDate
+        } = data;
+
+        const result: any = await DeveloperRepository.storeDeveloper([
+            name, sex, age, hobby, birthDate
+        ]);
+
+        if ('error' in result) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Erro na tentativa cadastrar um novo desenvolvedor',
+                ...result
+            };
+        }
+
+        if (!result.affectedRows) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Não foi possível realizar o cadatro do desenvolvedor',
+                ...result
+            }
+        }
+
+        return await DeveloperService.getDeveloperById(result.insertId);
+    }
+
 }

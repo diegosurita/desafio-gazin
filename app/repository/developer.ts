@@ -37,4 +37,16 @@ export default class DeveloperRepository {
         return await executeQuery(sql, [id])
     }
 
+    public static async storeDeveloper(data: Array<any>) {
+        const sql: string = `
+            INSERT INTO developers (
+                name, sex, age, hobby, birthdate
+            ) VALUES (
+                ?, ?, ?, ?, ?
+            )
+        `;
+
+        return await executeQuery(sql, data);
+    }
+
 }

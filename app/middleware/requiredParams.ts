@@ -4,7 +4,8 @@ export default async (request: NextApiRequest, response: NextApiResponse, params
     let missingParams: Array<string> = [];
 
     params.forEach(param => {
-        if (!(param in request.query)) {
+
+        if (!(param in request.body)) {
             missingParams.push(param);
         }
     });
@@ -12,7 +13,7 @@ export default async (request: NextApiRequest, response: NextApiResponse, params
     if (missingParams.length > 0) {
         return response.status(400).json({
             error: {
-                message: 'Parâmetros obrigatórios faltando',
+                message: 'Parâmentros obrigatórios não estão presentes na requisição',
                 params: missingParams
             }
         });

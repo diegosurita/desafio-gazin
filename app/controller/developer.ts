@@ -51,9 +51,13 @@ export default class DeveloperController {
         }
     }
 
-    public static create(request: NextApiRequest, response: NextApiResponse) {
+    public static async create(request: NextApiRequest, response: NextApiResponse) {
         try {
-            //
+            const developer: any = await DeveloperService.storeDeveloper(request.body);
+
+            return response.status(201).json({
+                data: developer
+            });
         } catch (e) {
             responseCatchError(response, e);
         }
