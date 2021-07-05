@@ -1,7 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
-import DeveloperController from "../../../app/controller/developer";
-import requiredParams from "../../../app/middleware/requiredParams";
-import responseCatchError from "../../../app/middleware/responseCatchError";
+import DeveloperController from "../../../src/api/controller/developer";
+import requiredParams from "../../../src/api/middleware/requiredParams";
+import responseCatchError from "../../../src/api/middleware/responseCatchError";
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
     try {

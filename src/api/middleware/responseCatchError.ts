@@ -1,4 +1,4 @@
-import {NextApiResponse} from "next";
+import type {NextApiResponse} from "next";
 
 export default async (response: NextApiResponse, e: any) => {
     const {type, message, details} = e,
