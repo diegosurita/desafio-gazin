@@ -1,23 +1,25 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 
-export default async (request: NextApiRequest, response: NextApiResponse, params: Array<string>) => {
+export default (request: NextApiRequest, response: NextApiResponse, params: Array<string>) => {
     let missingParams: Array<string> = [];
 
-    params.forEach(param => {
-
-        if (!(param in request.body)) {
-            missingParams.push(param);
-        }
-    });
-
-    if (missingParams.length > 0) {
-        return response.status(400).json({
-            error: {
-                message: 'Parâmentros obrigatórios não estão presentes na requisição',
-                params: missingParams
+    if (request.body === '') {
+        missingParams = params;
+    } else {
+        params.forEach(param => {
+            if (!(param in request.body)) {
+                missingParams.push(param);
             }
         });
     }
 
-    return true;
+    if (missingParams.length > 0) {
+        throw {
+            type: 'PARAMS_ERROR',
+            message: 'Parâmentros obrigatórios não estão presentes na requisição',
+            details: {
+                params: missingParams
+            }
+        };
+    }
 }

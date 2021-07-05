@@ -49,4 +49,34 @@ export default class DeveloperRepository {
         return await executeQuery(sql, data);
     }
 
+    public static async editDeveloper(developerId: number, data: any) {
+        const {name, sex, age, hobby, birthDate} = data
+        let updateData: Array<string> = [];
+
+        if (name)
+            updateData.push(`name = '${name}'`);
+
+        if (sex)
+            updateData.push(`sex = '${sex}'`);
+
+        if (age)
+            updateData.push(`age = ${age}`);
+
+        if (hobby)
+            updateData.push(`hobby = '${hobby}'`);
+
+        if (birthDate)
+            updateData.push(`birthDate = '${birthDate}'`);
+
+        const sql: string = `
+            UPDATE developers
+            SET
+                ${updateData.join()}
+            WHERE
+                developer_id = ${developerId}
+        `;
+
+        return await executeQuery(sql, []);
+    }
+
 }
