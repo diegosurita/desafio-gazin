@@ -112,4 +112,24 @@ export default class DeveloperService {
         return result.length > 0
     }
 
+    public static async deleteDeveloper(developerId: number) {
+        const result: any = await DeveloperRepository.deleteDeveloper(developerId);
+
+        if ('error' in result) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Erro na tentativa de excluir o desenvolvedor',
+                ...result
+            };
+        }
+
+        if (!result.affectedRows) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Não foi possível realizar a exclusão do desenvolvedor',
+                ...result
+            }
+        }
+    }
+
 }

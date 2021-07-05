@@ -68,8 +68,18 @@ export default class DeveloperController {
         })
     }
 
-    public static delete(request: NextApiRequest, response: NextApiResponse) {
-        //
+    public static async delete(request: NextApiRequest, response: NextApiResponse) {
+        const {id} = request.query,
+            developerId = parseInt(id.toString());
+
+        if (!(await DeveloperService.developerExists(developerId))) {
+            response.status(404).send('');
+            return;
+        }
+
+        await DeveloperService.deleteDeveloper(developerId);
+
+        response.status(200).send('');
     }
 
 }
