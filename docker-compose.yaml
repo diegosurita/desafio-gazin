@@ -4,6 +4,7 @@ services:
   app:
     image: gazin-app
     container_name: gazin-app
+    restart: always
     build: .
     ports:
       - 80:3000

@@ -76,4 +76,40 @@ export default class DeveloperService {
         return await DeveloperService.getDeveloperById(result.insertId);
     }
 
+    public static async editDeveloper(developerId: number, data: any) {
+        const result: any = await DeveloperRepository.editDeveloper(developerId, data);
+
+        if ('error' in result) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Erro na tentativa editar os dados do desenvolvedor',
+                ...result
+            };
+        }
+
+        if (!result.affectedRows) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Não foi possível realizar a edição do desenvolvedor',
+                ...result
+            }
+        }
+
+        return await DeveloperService.getDeveloperById(developerId);
+    }
+
+    public static async developerExists(developerId: number) {
+        const result: any = await DeveloperRepository.getDeveloperById(developerId);
+
+        if ('error' in result) {
+            throw {
+                type: 'DB_ERROR',
+                message: 'Erro na tentativa de obter o desenvolvedor',
+                ...result
+            };
+        }
+
+        return result.length > 0
+    }
+
 }

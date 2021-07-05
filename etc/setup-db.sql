@@ -16,7 +16,7 @@ INSERT INTO developers (
 ) VALUES (
     'Diego Surita',
     'M',
-    29,
+    30,
     'Baterista',
     '1991-06-20'
 );
