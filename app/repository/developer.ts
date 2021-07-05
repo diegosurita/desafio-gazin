@@ -79,4 +79,14 @@ export default class DeveloperRepository {
         return await executeQuery(sql, []);
     }
 
+    public static async deleteDeveloper(developerId: number) {
+        const sql: string = `
+            DELETE FROM developers
+            WHERE
+                developer_id = ?
+        `;
+
+        return await executeQuery(sql, [developerId])
+    }
+
 }
