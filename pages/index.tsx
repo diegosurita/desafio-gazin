@@ -1,10 +1,9 @@
-import {Fragment} from 'react';
+import {Fragment, useState} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {DataGrid, GridRowsProp, GridColDef, GridCellParams} from '@material-ui/data-grid';
@@ -51,30 +50,52 @@ export default function Index() {
             age: 30,
             hobby: 'Baterista',
             birthDate: '20/06/1991',
-            actions: (
-                <Edit/>
-            )
+            actions: JSON.stringify({
+                detailsUrl: '/developer/details/1',
+                editUrl: '/developer/edit/1',
+                deleteUrl: '/developer/delete/1'
+            })
         }
     ];
 
     const columns: GridColDef[] = [
-        {field: 'name', headerName: 'Nome', width: 150, align: 'center', headerAlign: 'center'},
+        {field: 'name', headerName: 'Nome', width: 300, align: 'center', headerAlign: 'center'},
         {field: 'sex', headerName: 'Sexo', width: 150, align: 'center', headerAlign: 'center'},
         {field: 'age', headerName: 'Idade', width: 150, align: 'center', headerAlign: 'center'},
         {field: 'hobby', headerName: 'Hobby', width: 150, align: 'center', headerAlign: 'center'},
-        {field: 'birthDate', headerName: 'Data de Nascimento', width: 150, align: 'center', headerAlign: 'center'},
+        {field: 'birthDate', headerName: 'Data de Nascimento', width: 200, align: 'center', headerAlign: 'center'},
         {
             field: 'actions',
             headerName: 'Ações',
             width: 300,
             align: 'center',
             headerAlign: 'center',
-            renderCell: (params: GridCellParams) => {
+            renderCell: (params: GridCellParams | any) => {
+                const {detailsUrl, editUrl, deleteUrl} = JSON.parse(params.value);
+
                 return (
                     <div className={classes.actionButtons}>
-                        <Button variant="outlined"><Visibility/></Button>
-                        <Button variant="outlined"><Edit/></Button>
-                        <Button variant="outlined"><Delete/></Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            href={detailsUrl}
+                        >
+                            <Visibility fontSize='small'/>
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            href={editUrl}
+                        >
+                            <Edit fontSize='small'/>
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            href={deleteUrl}
+                        >
+                            <Delete fontSize='small'/>
+                        </Button>
                     </div>
                 )
             }
@@ -87,27 +108,12 @@ export default function Index() {
             <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                        Company name
+                        Gazin Tech
                     </Typography>
-                    <nav>
-                        <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                            Features
-                        </Link>
-                        <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                            Enterprise
-                        </Link>
-                        <Link variant="button" color="textPrimary" href="#" className={classes.link}>
-                            Support
-                        </Link>
-                    </nav>
-                    <Button href="#" color="primary" variant="outlined" className={classes.link}>
-                        Login
-                    </Button>
                 </Toolbar>
             </AppBar>
             <Container maxWidth="lg" component="main" className={classes.heroContent}>
                 <div style={{height: 500, width: '100%'}}>
-
                     <DataGrid rows={rows} columns={columns}/>
                 </div>
             </Container>
