@@ -16,8 +16,8 @@ export default class DeveloperService {
         return result;
     }
 
-    public static async getCountDevelopers() {
-        const result: any = await DeveloperRepository.getTotalDevelopers();
+    public static async getCountDevelopers(search?: string) {
+        const result: any = await DeveloperRepository.getTotalDevelopers(search);
 
         if ('error' in result) {
             throw {

@@ -6,5 +6,5 @@ export default async (response: NextApiResponse, e: any) => {
 
     // TODO: realizar a integração com o bugsnag
 
-    response.status(400).json(jsonResponse);
+    response.status(400).json({error: jsonResponse});
 }

@@ -5,5 +5,6 @@ module.exports = {
         MYSQL_DATABASE: 'gazin',
         MYSQL_USER: 'root',
         MYSQL_PASSWORD: '',
+        API_URL: 'http://localhost/api'
     },
 }
