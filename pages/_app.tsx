@@ -1,4 +1,3 @@
-// import App from 'next/app'
 import {Fragment} from "react";
 import type {AppProps} from 'next/app'
 import {makeStyles} from '@material-ui/core/styles';
@@ -23,19 +22,11 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
     },
     toolbarTitle: {
-        flexGrow: 1,
-    },
-    link: {
-        margin: theme.spacing(1, 1.5),
+        flexGrow: 0.44,
     },
     heroContent: {
         padding: theme.spacing(8, 0, 6),
     },
-    actionButtons: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    }
 }));
 
 const MyApp = ({Component, pageProps}: AppProps) => {

@@ -4,14 +4,14 @@ export default class DeveloperRepository {
 
     public static async fetchAll(page: number, limit: number, search: string = '') {
         let searchLike: string = '',
-            sqlValues: Array<string | number> = [
+            sqlValues: Array<any> = [
                 (page * limit) - limit,
                 limit
             ];
 
         if (search !== '') {
             searchLike = ` WHERE name LIKE ?`;
-            sqlValues.unshift(`'%${search}%'`);
+            sqlValues.unshift(`%${search}%`);
         }
 
         const sql: string = `SELECT * FROM developers ${searchLike} LIMIT ?, ?`;
@@ -19,10 +19,18 @@ export default class DeveloperRepository {
         return await executeQuery(sql, sqlValues);
     }
 
-    public static async getTotalDevelopers() {
-        const sql: string = `SELECT COUNT(1) AS total FROM developers`;
+    public static async getTotalDevelopers(search?: string) {
+        let valuesSql: Array<any> = [],
+            whereSearch: string = '';
 
-        return await executeQuery(sql, []);
+        if (search) {
+            whereSearch = ' WHERE name LIKE ?'
+            valuesSql.push(`%${search}%`);
+        }
+
+        const sql: string = `SELECT COUNT(1) AS total FROM developers ${whereSearch}`;
+
+        return await executeQuery(sql, valuesSql);
     }
 
     public static async getDeveloperById(id: number) {
