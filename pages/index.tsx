@@ -1,60 +1,33 @@
 import {Fragment, useState, useEffect} from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import {makeStyles} from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import {DataGrid, GridColDef} from '@material-ui/data-grid';
 import {Edit, Visibility, Delete} from "@material-ui/icons";
 import DeveloperService from "../src/frontend/service/developer";
-import ClearAllIcon from '@material-ui/icons/ClearAll';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 
-const useStyles = makeStyles((theme) => ({
-    '@global': {
-        ul: {
-            margin: 0,
-            padding: 0,
-            listStyle: 'none',
-        },
-    },
-    appBar: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-    },
-    toolbar: {
-        flexWrap: 'wrap',
-    },
-    toolbarTitle: {
-        flexGrow: 1,
-    },
-    link: {
-        margin: theme.spacing(1, 1.5),
-    },
-    heroContent: {
-        padding: theme.spacing(8, 0, 6),
-    },
-    actionButtons: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    }
-}));
+const paginationDefault: any = {
+    page: 1,
+    limit: 25
+};
 
-export default function Index() {
+export default function Index(props: any) {
     let [developers, setDevelopers] = useState<Array<any>>([]),
-        [loading, setLoading] = useState(true),
-        content: any = '';
+        [metadataGrid, setMetadataGrid] = useState({
+            page: paginationDefault.page,
+            limit: paginationDefault.limit,
+            total: 0
+        }),
+        [loading, setLoading] = useState<boolean>(true),
+        [search, setSearch] = useState<string>('');
 
-    const classes = useStyles(),
+    const {classes} = props,
         columns: GridColDef[] = [
-            {field: 'name', headerName: 'Nome', width: 300, align: 'center', headerAlign: 'center'},
-            {field: 'sex', headerName: 'Sexo', width: 150, align: 'center', headerAlign: 'center'},
-            {field: 'age', headerName: 'Idade', width: 150, align: 'center', headerAlign: 'center'},
-            {field: 'hobby', headerName: 'Hobby', width: 150, align: 'center', headerAlign: 'center'},
-            {field: 'birthDate', headerName: 'Data de Nascimento', width: 250, align: 'center', headerAlign: 'center'},
+            {field: 'id', headerName: 'ID', width: 100, align: 'center', headerAlign: 'center'},
+            {field: 'name', headerName: 'Nome', width: 250},
+            {field: 'sex', headerName: 'Sexo', width: 120},
+            {field: 'age', headerName: 'Idade', width: 120},
+            {field: 'hobby', headerName: 'Hobby', width: 120},
+            {field: 'birthDate', headerName: 'Data de Nascimento', width: 200, align: 'center', headerAlign: 'center'},
             {
                 field: 'actions',
                 headerName: 'Ações',
@@ -81,81 +54,72 @@ export default function Index() {
             },
         ];
 
-    useEffect(() => {
-        const fetchAllDevelopers = async () => {
-            const result = await DeveloperService.fetchAll();
+    const loadDevelopersList = async (page?: number, limit?: number, search?: string) => {
+        setDevelopers([]);
+        setLoading(true);
+        const {data, meta} = await DeveloperService.fetchAll(page, limit, search);
 
-            if (result.data.length > 0) {
-                setDevelopers([]);
+        if (data.length > 0) {
+            let developersList: any = [];
 
-                result.data.forEach((developer: any) => {
-                    const newDevelopers: Array<any> = [...developers, {
-                        id: developer.developer_id,
-                        name: developer.name,
-                        sex: developer.sex,
-                        age: developer.age,
-                        hobby: developer.hobby,
-                        birthDate: developer.birthDate,
-                        actions: JSON.stringify({
-                            detailsUrl: `/developer/${developer.developer_id}/details`,
-                            editUrl: `/developer/${developer.developer_id}/edit`
-                        })
-                    }];
-
-                    setDevelopers(newDevelopers);
-                    setLoading(false);
+            data.forEach((developer: any) => {
+                developersList.push({
+                    id: developer.developer_id,
+                    name: developer.name,
+                    sex: developer.sex,
+                    age: developer.age,
+                    hobby: developer.hobby,
+                    birthDate: developer.birthDate,
+                    actions: JSON.stringify({
+                        detailsUrl: `/developer/${developer.developer_id}/details`,
+                        editUrl: `/developer/${developer.developer_id}/edit`
+                    })
                 });
-            }
-        }
+            });
 
-        fetchAllDevelopers();
+            setDevelopers(developersList);
+            setMetadataGrid(meta);
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        loadDevelopersList();
     }, []);
 
-    if (!loading) {
-        if (developers.length > 0) {
-            content = (
-                <Fragment>
-                    <Button
-                        variant='contained'
-                        style={{marginBottom: '20px'}}
-                        color='primary'
-                    >
-                        Novo
-                    </Button>
-                    <div style={{height: 500, width: '100%'}}>
-                        <DataGrid rows={developers} columns={columns}/>
-                    </div>
-                </Fragment>
-            );
-        } else {
-            content = (
-                <Fragment>
-                    <ClearAllIcon/>
-                    <div>Nenhum desenvolvedor encontrado</div>
-                </Fragment>
-            );
-        }
-    } else {
-        content = (
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                <CircularProgress/>
-            </div>
-        );
-    }
+    const newButton: JSX.Element = (
+        <Button
+            variant='contained'
+            style={{margin: '20px 0'}}
+            color='primary'
+            href={`/developer/new`}
+        >
+            Novo
+        </Button>
+    );
 
     return (
         <Fragment>
-            <CssBaseline/>
-            <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
-                <Toolbar className={classes.toolbar}>
-                    <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                        Gazin Tech
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Container maxWidth="lg" component="main" className={classes.heroContent}>
-                {content}
-            </Container>
+            {newButton}
+            <div style={{height: 500, width: '100%'}}>
+                <DataGrid
+                    paginationMode="server"
+                    page={metadataGrid.page - 1}
+                    pageSize={metadataGrid.limit}
+                    rowCount={metadataGrid.total}
+                    onPageChange={(param) => {
+                        loadDevelopersList(param.page + 1, param.pageSize, search);
+                    }}
+                    onPageSizeChange={(param) => {
+                        loadDevelopersList(param.page + 1, param.pageSize, search);
+                    }}
+                    // rowsPerPageOptions={[5, 10, 25]}
+                    rows={developers}
+                    columns={columns}
+                    loading={loading}
+                    hideFooterSelectedRowCount={true}
+                />
+            </div>
         </Fragment>
     );
 }

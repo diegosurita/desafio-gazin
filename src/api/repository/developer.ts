@@ -5,7 +5,7 @@ export default class DeveloperRepository {
     public static async fetchAll(page: number, limit: number, search: string = '') {
         let searchLike: string = '',
             sqlValues: Array<string | number> = [
-                (page - 1),
+                (page * limit) - limit,
                 limit
             ];
 
@@ -14,9 +14,7 @@ export default class DeveloperRepository {
             sqlValues.unshift(`'%${search}%'`);
         }
 
-        const sql: string = `
-            SELECT * FROM developers ${searchLike} LIMIT ?, ?
-        `;
+        const sql: string = `SELECT * FROM developers ${searchLike} LIMIT ?, ?`;
 
         return await executeQuery(sql, sqlValues);
     }
