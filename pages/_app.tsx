@@ -1,11 +1,12 @@
-import {Fragment} from "react";
+import {Fragment, useEffect} from "react";
 import type {AppProps} from 'next/app'
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from '@material-ui/core/Container';
+import {createMuiTheme} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -29,23 +30,33 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const theme = createMuiTheme();
+
 const MyApp = ({Component, pageProps}: AppProps) => {
     const classes = useStyles();
 
+    useEffect(() => {
+        // Remove the server-side injected CSS.
+        const jssStyles: any = document.querySelector('#jss-server-side');
+        if (jssStyles) {
+            jssStyles.parentElement.removeChild(jssStyles);
+        }
+    }, []);
+
     return (
-        <Fragment>
+        <ThemeProvider theme={theme}>
             <CssBaseline/>
             <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
-                        Gazin Tech
+                        Desafio Gazin Tech
                     </Typography>
                 </Toolbar>
             </AppBar>
             <Container maxWidth="lg" component="main" className={classes.heroContent}>
                 <Component {...pageProps} classes={classes}/>
             </Container>
-        </Fragment>
+        </ThemeProvider>
     )
 }
 

@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Index(props: any) {
+const Index = () => {
     let [developers, setDevelopers] = useState<Array<any>>([]),
         [listPage, setListPage] = useState(initParams.pagination.page),
         [listLimit, setListLimit] = useState(initParams.pagination.limit),
@@ -61,8 +61,8 @@ export default function Index(props: any) {
             {field: 'name', headerName: 'Nome', width: 250},
             {field: 'sex', headerName: 'Sexo', width: 120},
             {field: 'age', headerName: 'Idade', width: 120},
-            {field: 'hobby', headerName: 'Hobby', width: 120},
-            {field: 'birthDate', headerName: 'Data de Nascimento', width: 200, align: 'center', headerAlign: 'center'},
+            {field: 'hobby', headerName: 'Hobby', width: 150},
+            {field: 'birthDate', headerName: 'Data de Nascimento', width: 150, align: 'center', headerAlign: 'center'},
             {
                 field: 'actions',
                 headerName: 'Ações',
@@ -74,11 +74,6 @@ export default function Index(props: any) {
 
                     return (
                         <div className={classes.actionButtons}>
-                            <Tooltip title='Detalhes'>
-                                <IconButton href={detailsUrl}>
-                                    <Visibility fontSize='small'/>
-                                </IconButton>
-                            </Tooltip>
                             <Tooltip title='Editar'>
                                 <IconButton href={editUrl}>
                                     <Edit fontSize='small' color='primary'/>
@@ -118,7 +113,6 @@ export default function Index(props: any) {
                     hobby: developer.hobby,
                     birthDate: `${(birthdate.getDate() + 1).toString().padStart(2, '0')}/${(birthdate.getMonth() + 1).toString().padStart(2, '0')}/${birthdate.getFullYear()}`,
                     actions: JSON.stringify({
-                        detailsUrl: `/developer/${developer.developer_id}/details`,
                         editUrl: `/developer/${developer.developer_id}/edit`
                     })
                 });
@@ -190,3 +184,5 @@ export default function Index(props: any) {
         </div>
     );
 }
+
+export default Index

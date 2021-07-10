@@ -22,11 +22,6 @@ export default class DeveloperService {
                 params: requestParams
             });
 
-            if (developers.status === 400) {
-                alert(developers.error.message);
-                return [];
-            }
-
             return developers.data;
         } catch (e) {
             if (e.response.status === 400) {
@@ -36,6 +31,16 @@ export default class DeveloperService {
 
             if (e.response.status === 404) {
                 return {data: [], meta: {page, limit, total: 0}};
+            }
+        }
+    }
+
+    public static async create(data: any) {
+        try {
+            return await axios.post(process.env.API_URL + '/developers', data);
+        } catch (e) {
+            if (e.response.status === 400) {
+                alert(e.response.data.error.message);
             }
         }
     }
