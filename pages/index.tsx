@@ -6,7 +6,7 @@ import DeveloperService from "../src/frontend/service/developer";
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import {Paper} from "@material-ui/core";
+import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from "moment-timezone";
@@ -54,12 +54,15 @@ const Index = () => {
         [listLimit, setListLimit] = useState(initParams.pagination.limit),
         [listTotal, setListTotal] = useState(0),
         [loading, setLoading] = useState<boolean>(true),
-        [search, setSearch] = useState('');
+        [search, setSearch] = useState(''),
+        [deleteDialog, setDeleteDialog] = useState(false),
+        [deleteDevName, setDeleteDevName] = useState(''),
+        [deleteDevId, setDeleteDevId] = useState('');
 
     const classes = useStyles(),
         columns: GridColDef[] = [
             {field: 'id', headerName: 'ID', width: 100, align: 'center', headerAlign: 'center'},
-            {field: 'name', headerName: 'Nome', width: 250},
+            {field: 'name', headerName: 'Nome', width: 300},
             {field: 'sex', headerName: 'Sexo', width: 120},
             {field: 'age', headerName: 'Idade', width: 120},
             {field: 'hobby', headerName: 'Hobby', width: 150},
@@ -71,7 +74,7 @@ const Index = () => {
                 align: 'center',
                 headerAlign: 'center',
                 renderCell: (params: any) => {
-                    const {detailsUrl, editUrl} = JSON.parse(params.value);
+                    const {editUrl, developerId, name} = JSON.parse(params.value);
 
                     return (
                         <div className={classes.actionButtons}>
@@ -81,7 +84,7 @@ const Index = () => {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title='Excluir'>
-                                <IconButton onClick={() => console.log('deleting...')}>
+                                <IconButton onClick={() => onDeleteClick(developerId, name)}>
                                     <Delete fontSize='small' color='error'/>
                                 </IconButton>
                             </Tooltip>
@@ -91,7 +94,7 @@ const Index = () => {
             },
         ];
 
-    const loadDevelopersList = async (page?: number, limit?: number, search?: string) => {
+    const loadDevelopersList: any = async (page?: number, limit?: number, search?: string) => {
         setDevelopers([]);
         setLoading(true);
         const {data, meta} = await DeveloperService.fetchAll(page, limit, search);
@@ -112,7 +115,9 @@ const Index = () => {
                     hobby: developer.hobby,
                     birthDate: moment(developer.birthdate.substr(0, 10)).format('DD/MM/YYYY'),
                     actions: JSON.stringify({
-                        editUrl: `/developer/${developer.developer_id}/edit`
+                        editUrl: `/developer/${developer.developer_id}/edit`,
+                        developerId: developer.developer_id,
+                        name: developer.name
                     })
                 });
             });
@@ -125,7 +130,7 @@ const Index = () => {
         setLoading(false);
     }
 
-    const onChangeSearch = (e: any) => {
+    const onChangeSearch: any = (e: any) => {
         if (e.target.value !== '') {
             setSearch(e.target.value);
         } else {
@@ -134,6 +139,27 @@ const Index = () => {
             setSearch(e.target.value);
             loadDevelopersList(listPage, listLimit, e.target.value);
         }
+    }
+
+    const onDeleteAction: any = async (deleteAction: boolean) => {
+        if (deleteAction) {
+            const result: any = await DeveloperService.delete(deleteDevId);
+
+            if (result.status === 200) {
+                loadDevelopersList();
+                setDeleteDialog(false);
+            }
+        } else {
+            setDeleteDevId('');
+            setDeleteDevName('');
+            setDeleteDialog(false);
+        }
+    }
+
+    const onDeleteClick: any = (developerId: string, name: string) => {
+        setDeleteDevId(developerId);
+        setDeleteDevName(name);
+        setDeleteDialog(true);
     }
 
     useEffect(() => {
@@ -180,6 +206,23 @@ const Index = () => {
                     autoHeight={true}
                 />
             </div>
+            <Dialog open={deleteDialog}>
+                <DialogTitle>Excluir desenvolvedor</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        A ação de exclusão do desenvolvedor não poderá ser revertida. Tem certeza que deseja excluir o
+                        desenvolvedor {deleteDevName}?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => onDeleteAction(false)} color="default" variant="contained">
+                        Cancelar
+                    </Button>
+                    <Button onClick={() => onDeleteAction(true)} color="secondary" autoFocus variant="contained">
+                        Excluir
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
