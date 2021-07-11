@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    image: gazin-app
+    container_name: gazin-app
+    restart: always
+    build: .
+    ports:
+      - 80:3000
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+
+  database:
+    image: mariadb:10
+    container_name: gazin-db
+    restart: always
+    volumes:
+      - ./etc/setup-db.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_DATABASE: 'gazin'
+      TZ: 'America/Sao_Paulo'
