@@ -1,4 +1,4 @@
-import {Fragment, useEffect} from "react";
+import {useEffect} from "react";
 import type {AppProps} from 'next/app'
 import {makeStyles, ThemeProvider} from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from '@material-ui/core/Container';
-import {createMuiTheme} from "@material-ui/core";
+import {createTheme} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     '@global': {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const theme = createMuiTheme();
+const theme = createTheme();
 
 const MyApp = ({Component, pageProps}: AppProps) => {
     const classes = useStyles();

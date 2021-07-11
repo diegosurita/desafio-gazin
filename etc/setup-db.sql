@@ -18,21 +18,21 @@ INSERT INTO developers (
 ), (
     'Luiz Antonio Surita', 'M', 58, 'Pedalar', '1963-10-07'
 ), (
-    'Beatriz Gomes Mello', 'F', 24, '', '1997-06-04'
+    'Beatriz Torres Melo', 'F', 24, '', '1997-06-04'
 ), (
     'Sonia Ap. do Nascimento Surita', 'F', 55, 'Experimentar novas receitas', '1965-04-14'
 ), (
     'Fulano de Tal', 'M', 30, 'Pedalar', '1991-10-20'
 ), (
-    'Pietra Cortesão Bouças', 'F', 35, 'Desenhar', '1986-05-23'
+    'Pietra Cortes Torres', 'F', 35, 'Desenhar', '1986-05-23'
 ), (
     'Matilda Vidigal Anes', 'F', 33, 'Pedalar', '1988-09-06'
 ), (
-    'Domingos Cortês Alcoforado', 'M', 31, 'Tocar violão', '1990-08-24'
+    'Domingos Cris Alcoforado', 'M', 31, 'Guitarra', '1990-08-24'
 ), (
-    'Laís Mata Santos', 'F', 29, 'Tocar piano', '1992-09-25'
+    'Lara Mata Santos', 'F', 29, 'Tocar piano', '1992-09-25'
 ), (
-    'Dilan Figueiró Ruas', 'M', 28, 'Surfar', '1993-01-05'
+    'Dilan Figueira Ruas', 'M', 28, 'Surfar', '1993-01-05'
 ), (
-    'Arnaldo Cipriano Gomes', 'M', 30, 'Produção musical', '1991-03-23'
+    'Arnaldo Cipriano Gomes', 'M', 30, 'Musico', '1991-03-23'
 );

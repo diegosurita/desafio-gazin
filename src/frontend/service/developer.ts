@@ -68,4 +68,15 @@ export default class DeveloperService {
         }
     }
 
+    public static async delete(developerId: string) {
+        try {
+            return await axios.delete(process.env.API_URL + `/developers/${developerId}`);
+        } catch (e) {
+            if (e.response.status === 400) {
+                alert(e.response.data.error.message);
+                return {status: 400};
+            }
+        }
+    }
+
 }
