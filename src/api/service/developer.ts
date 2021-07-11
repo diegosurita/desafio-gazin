@@ -1,4 +1,5 @@
 import DeveloperRepository from '../repository/developer';
+import moment from "moment";
 
 export default class DeveloperService {
 
@@ -31,7 +32,7 @@ export default class DeveloperService {
     }
 
     public static async getDeveloperById(id: number) {
-        const result = await DeveloperRepository.getDeveloperById(id);
+        const result: any = await DeveloperRepository.getDeveloperById(id);
 
         if ('error' in result) {
             throw {
@@ -41,11 +42,15 @@ export default class DeveloperService {
             };
         }
 
-        return result;
+        if (!result.length) {
+            return false;
+        }
+
+        return result[0];
     }
 
     public static async storeDeveloper(data: any) {
-        const {
+        let {
             name,
             sex,
             age,

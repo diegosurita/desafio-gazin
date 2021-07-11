@@ -1,4 +1,4 @@
-import {Fragment, useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import Button from '@material-ui/core/Button';
 import {DataGrid, GridColDef} from '@material-ui/data-grid';
 import {Edit, Visibility, Delete} from "@material-ui/icons";
@@ -9,6 +9,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import {Paper} from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import moment from "moment-timezone";
 
 const initParams: any = {
     pagination: {
@@ -103,15 +104,13 @@ const Index = () => {
             let developersList: any = [];
 
             data.forEach((developer: any) => {
-                const birthdate: any = new Date(developer.birthdate);
-
                 developersList.push({
                     id: developer.developer_id,
                     name: developer.name,
                     sex: developer.sex,
                     age: developer.age,
                     hobby: developer.hobby,
-                    birthDate: `${(birthdate.getDate() + 1).toString().padStart(2, '0')}/${(birthdate.getMonth() + 1).toString().padStart(2, '0')}/${birthdate.getFullYear()}`,
+                    birthDate: moment(developer.birthdate.substr(0, 10)).format('DD/MM/YYYY'),
                     actions: JSON.stringify({
                         editUrl: `/developer/${developer.developer_id}/edit`
                     })
