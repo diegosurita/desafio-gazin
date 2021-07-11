@@ -3,7 +3,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent, DialogContentText,
-    DialogTitle,
     Divider,
     InputLabel,
     MenuItem,
@@ -11,7 +10,7 @@ import {
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import {createStyles, makeStyles} from "@material-ui/core/styles";
-import {Fragment, useState, useEffect} from "react";
+import {Fragment, useEffect, useState} from "react";
 import DeveloperService from "../service/developer";
 
 const useStyle = makeStyles((theme) =>
@@ -32,28 +31,60 @@ const useStyle = makeStyles((theme) =>
     })
 );
 
-const Form = () => {
+const Form = ({developer}: any) => {
     const classes = useStyle(),
+        [developerId, setDeveloperId] = useState(''),
         [name, setName] = useState(''),
         [sex, setSex] = useState(''),
         [age, setAge] = useState<number | string>(''),
         [hobby, setHobby] = useState(''),
         [birthDate, setBirthDate] = useState(''),
         [submitted, setSubmitted] = useState(false),
-        [openDialog, setOpenDialog] = useState(false);
+        [openDialog, setOpenDialog] = useState(false),
+        [textDialog, setTextDialog] = useState('');
+
+    let developerIdField: JSX.Element | string = '';
 
     useEffect(() => {
-        console.log(openDialog)
-    })
+        if (developer) {
+            setDeveloperId(developer.developer_id);
+            developerIdField = (
+                <TextField
+                    disabled
+                    className={classes.fields}
+                    variant="outlined"
+                    id="developerId"
+                    label="Id"
+                    value={developerId}
+                />
+            );
+            setName(developer.name);
+            setSex(developer.sex);
+            setAge(developer.age);
+            setHobby(developer.hobby);
+            setBirthDate(developer.birthdate);
+        }
+    }, [developer]);
 
     const onSubmit = async (e: any) => {
         e.preventDefault();
         setSubmitted(true);
 
         if (name !== '' && sex !== '' && age !== '' && hobby !== '' && birthDate !== '') {
+            if (developerId && developerId !== '') {
+                const result: any = await DeveloperService.edit(developerId, {name, sex, age, hobby, birthDate});
+
+                if (result.status == 200) {
+                    setTextDialog('Desenvolvedor editado com sucesso!');
+                    setOpenDialog(true);
+                    return;
+                }
+            }
+
             const result: any = await DeveloperService.create({name, sex, age, hobby, birthDate});
 
             if (result.status == 201) {
+                setTextDialog('Desenvolvedor cadastrado com sucesso!');
                 setOpenDialog(true);
             }
         }
@@ -77,6 +108,7 @@ const Form = () => {
     return (
         <Fragment>
             <form className={classes.form} noValidate autoComplete="off" onSubmit={(e: any) => onSubmit(e)}>
+                {developerIdField}
                 <TextField
                     error={name === '' && submitted}
                     helperText={name === '' && submitted ? 'Este campo é obrigatório' : ''}
@@ -164,7 +196,7 @@ const Form = () => {
             </form>
             <Dialog open={openDialog} onClose={onDialogClose}>
                 <DialogContent>
-                    <DialogContentText id="dialog">Desenvolvedor cadastrado com sucesso!</DialogContentText>
+                    <DialogContentText id="dialog">{textDialog}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onDialogClose} color="primary" autoFocus>ok</Button>

@@ -1,6 +1,7 @@
 import type {NextApiRequest, NextApiResponse} from "next";
 import DeveloperService from '../service/developer';
 import responseCatchError from "../middleware/responseCatchError";
+import moment from "moment";
 
 export default class DeveloperController {
 
@@ -33,14 +34,16 @@ export default class DeveloperController {
     public static async detail(request: NextApiRequest, response: NextApiResponse) {
         try {
             const {id} = request.query,
-                developerId = parseInt(id.toString());
+                developerId: number = parseInt(id.toString());
 
-            const developer = await DeveloperService.getDeveloperById(developerId);
+            const developer: any = await DeveloperService.getDeveloperById(developerId);
 
-            if (!developer.length) {
+            if (!developer) {
                 response.status(404).send('');
                 return;
             }
+
+            developer.birthdate = moment(developer.birthdate).format('YYYY-MM-DD');
 
             response.status(200).json({
                 data: developer

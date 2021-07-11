@@ -24,3 +24,4 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
       MYSQL_DATABASE: 'gazin'
+      TZ: 'America/Sao_Paulo'
